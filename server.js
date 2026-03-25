@@ -14,7 +14,7 @@ app.post("/analyze", async (req, res) => {
   try {
     let groqPayload;
 
-    // 1) Kiro 방식: imageBase64, imageMime, prompt를 보낸 경우
+    // 1) 새 방식: imageBase64, imageMime, prompt를 받는 경우
     if (req.body.imageBase64 && req.body.prompt) {
       const imageMime = req.body.imageMime || "image/jpeg";
 
@@ -38,7 +38,7 @@ app.post("/analyze", async (req, res) => {
         max_tokens: 1024
       };
     } else {
-      // 2) 기존 방식: 프론트가 Groq payload 전체를 보낸 경우
+      // 2) 예전 방식: 프론트가 Groq용 payload 전체를 보낸 경우
       groqPayload = req.body;
     }
 
@@ -56,6 +56,7 @@ app.post("/analyze", async (req, res) => {
 
     const data = await response.json();
     res.status(response.status).json(data);
+
   } catch (error) {
     res.status(500).json({
       error: "Server error",
